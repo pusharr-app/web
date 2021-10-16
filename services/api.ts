@@ -31,3 +31,16 @@ export function useEntries() {
     error,
   };
 }
+
+export function useApikeys() {
+  const AuthUser = useAuthUser();
+  const { data, error } = useSWR<string[]>(
+    `/api/apikeys`,
+    get(AuthUser, 'keys'),
+  );
+  return {
+    apikeys: data ?? [],
+    isLoading: !error && !data,
+    error,
+  };
+}

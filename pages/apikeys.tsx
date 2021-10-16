@@ -2,17 +2,14 @@ import React from 'react';
 import { useAuthUser, withAuthUser, AuthAction } from 'next-firebase-auth';
 import FullPageLoader from '../components/FullPageLoader';
 import getAbsoluteURL from '../utils/getAbsoluteURL';
-import useSWR, { mutate } from 'swr';
-import { get } from '../services/api';
+import { mutate } from 'swr';
+import { useApikeys } from '../services/api';
 import { ApikeyItem } from '../components/ApikeyItem';
 import { LoggedInLayout } from '../components/LoggedInLayout';
 
 const Apikeys = () => {
   const AuthUser = useAuthUser();
-  const { data, error } = useSWR<string[]>(
-    `/api/apikeys`,
-    get(AuthUser, 'keys'),
-  );
+  const { apikeys, error } = useApikeys();
 
   async function createKey() {
     const token = await AuthUser.getIdToken();
@@ -27,20 +24,6 @@ const Apikeys = () => {
     mutate('/api/apikeys');
   }
 
-  async function deleteKey(key: string) {
-    const token = await AuthUser.getIdToken();
-    const endpoint = getAbsoluteURL('/api/apikeys');
-    await fetch(endpoint, {
-      method: 'DELETE',
-      headers: {
-        Authorization: token!,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ key }),
-    });
-    mutate('/api/apikeys');
-  }
-
   return (
     <LoggedInLayout title="Apikeys">
       <button
@@ -50,7 +33,7 @@ const Apikeys = () => {
       >
         Create apikey
       </button>
-      {data && data.map((key) => <ApikeyItem key={key} apikey={key} />)}
+      {apikeys && apikeys.map((key) => <ApikeyItem key={key} apikey={key} />)}
     </LoggedInLayout>
   );
 };
