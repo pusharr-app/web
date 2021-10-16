@@ -1,5 +1,5 @@
-import React from 'react'
-import Link from 'next/link'
+import React from 'react';
+import Link from 'next/link';
 
 const styles = {
   container: {
@@ -12,9 +12,15 @@ const styles = {
     marginLeft: 16,
     cursor: 'pointer',
   },
-}
+};
 
-const Header = ({ email, signOut }: {email: string | null, signOut: () => void}) => (
+const Header = ({
+  email,
+  signOut,
+}: {
+  email: string | null;
+  signOut: () => void;
+}) => (
   <div style={styles.container}>
     {email ? (
       <>
@@ -22,7 +28,7 @@ const Header = ({ email, signOut }: {email: string | null, signOut: () => void})
         <button
           type="button"
           onClick={() => {
-            signOut()
+            signOut();
           }}
           style={styles.button}
         >
@@ -32,7 +38,7 @@ const Header = ({ email, signOut }: {email: string | null, signOut: () => void})
     ) : (
       <>
         <p>You are not signed in.</p>
-        <Link href="/auth">
+        <Link href="/login">
           <a>
             <button type="button" style={styles.button}>
               Sign in
@@ -42,6 +48,6 @@ const Header = ({ email, signOut }: {email: string | null, signOut: () => void})
       </>
     )}
   </div>
-)
+);
 
-export default Header
+export default Header;
