@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import initAuth from '../../utils/initAuth';
 import redis from '../../utils/redis';
-import type { Sonarr } from '../../types/Sonarr';
 import { verifyIdToken } from 'next-firebase-auth';
 
 initAuth();
