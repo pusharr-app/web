@@ -4,10 +4,9 @@ import Header from '../components/Header';
 import FullPageLoader from '../components/FullPageLoader';
 import getAbsoluteURL from '../utils/getAbsoluteURL';
 import useSWR, { mutate } from 'swr';
-import { get, useEntries } from '../services/api';
-import { Sonarr } from '../types/Sonarr';
-import { deleteKey } from '../utils/apikeys';
+import { get } from '../services/api';
 import { ApikeyItem } from '../components/ApikeyItem';
+import { LoggedInLayout } from '../components/LoggedInLayout';
 
 const Apikeys = () => {
   const AuthUser = useAuthUser();
@@ -44,22 +43,16 @@ const Apikeys = () => {
   }
 
   return (
-    <div>
-      <Header email={AuthUser.email} signOut={AuthUser.signOut} />
-      <div>
-        <div>
-          <h3>Apikeys</h3>
-          <button
-            type="button"
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            onClick={() => createKey()}
-          >
-            Create apikey
-          </button>
-          {data && data.map((key) => <ApikeyItem key={key} apikey={key} />)}
-        </div>
-      </div>
-    </div>
+    <LoggedInLayout title="Apikeys">
+      <button
+        type="button"
+        className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+        onClick={() => createKey()}
+      >
+        Create apikey
+      </button>
+      {data && data.map((key) => <ApikeyItem key={key} apikey={key} />)}
+    </LoggedInLayout>
   );
 };
 
