@@ -3,11 +3,7 @@ import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { HomeIcon, MenuIcon, UsersIcon, XIcon } from '@heroicons/react/outline';
 import { useAuthUser } from 'next-firebase-auth';
-
-const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, current: false },
-  { name: 'Apikeys', href: '/apikeys', icon: UsersIcon, current: false },
-];
+import { useRouter } from 'next/router';
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ');
@@ -18,6 +14,14 @@ export const LoggedInLayout: React.FC<{ title: string }> = ({
   title,
 }) => {
   const AuthUser = useAuthUser();
+  const router = useRouter();
+  console.log(router.pathname);
+
+  const navigation = [
+    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
+    { name: 'Apikeys', href: '/apikeys', icon: UsersIcon },
+  ];
+
   console.log(AuthUser);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -80,7 +84,7 @@ export const LoggedInLayout: React.FC<{ title: string }> = ({
                       key={item.name}
                       href={item.href}
                       className={classNames(
-                        item.current
+                        item.href === router.pathname
                           ? 'bg-gray-900 text-white'
                           : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                         'group flex items-center px-2 py-2 text-base font-medium rounded-md',
@@ -88,7 +92,7 @@ export const LoggedInLayout: React.FC<{ title: string }> = ({
                     >
                       <item.icon
                         className={classNames(
-                          item.current
+                          item.href === router.pathname
                             ? 'text-gray-300'
                             : 'text-gray-400 group-hover:text-gray-300',
                           'mr-4 flex-shrink-0 h-6 w-6',
@@ -148,7 +152,7 @@ export const LoggedInLayout: React.FC<{ title: string }> = ({
                     key={item.name}
                     href={item.href}
                     className={classNames(
-                      item.current
+                      item.href === router.pathname
                         ? 'bg-gray-900 text-white'
                         : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                       'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
@@ -156,7 +160,7 @@ export const LoggedInLayout: React.FC<{ title: string }> = ({
                   >
                     <item.icon
                       className={classNames(
-                        item.current
+                        item.href === router.pathname
                           ? 'text-gray-300'
                           : 'text-gray-400 group-hover:text-gray-300',
                         'mr-3 flex-shrink-0 h-6 w-6',

@@ -7,6 +7,7 @@ import { mutate } from 'swr';
 import { useEntries } from '../services/api';
 import { LoggedInLayout } from '../components/LoggedInLayout';
 import { Sonarr } from '../types/Sonarr';
+import { ExclamationIcon } from '@heroicons/react/outline';
 
 const Dashboard = () => {
   const AuthUser = useAuthUser();
@@ -55,7 +56,7 @@ const Dashboard = () => {
     <LoggedInLayout title="Dashboard">
       <button onClick={() => addTestData()}>Add sonarr test data</button>
       <ul role="list" className="divide-y divide-gray-200">
-        {entries &&
+        {entries && entries.length > 0 ? (
           entries.map((entry) => (
             <li key={entry.__createdAt.toString()} className="py-4">
               <div className="flex space-x-3">
@@ -87,7 +88,24 @@ const Dashboard = () => {
                 </div>
               </div>
             </li>
-          ))}
+          ))
+        ) : (
+          <div className="flex content-center mt-5">
+            <button
+              type="button"
+              onClick={() => addTestData()}
+              className="block w-4/5 border-2 border-gray-300 border-dashed rounded-lg p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              <ExclamationIcon className="h-6 w-6" aria-hidden="true" />
+              <button
+                type="button"
+                className="mt-2 block text-sm font-medium text-gray-900"
+              >
+                Add a test row
+              </button>
+            </button>
+          </div>
+        )}
       </ul>
     </LoggedInLayout>
   );
