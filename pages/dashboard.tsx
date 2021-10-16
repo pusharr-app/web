@@ -4,14 +4,16 @@ import TimeAgo from 'react-timeago';
 import FullPageLoader from '../components/FullPageLoader';
 import getAbsoluteURL from '../utils/getAbsoluteURL';
 import { mutate } from 'swr';
-import { useEntries } from '../services/api';
+import { useApikeys, useEntries } from '../services/api';
 import { LoggedInLayout } from '../components/LoggedInLayout';
 import { Sonarr } from '../types/Sonarr';
 import { ExclamationIcon } from '@heroicons/react/outline';
+import { LinkGenerator } from '../components/LinkGenerator';
 
 const Dashboard = () => {
   const AuthUser = useAuthUser();
 
+  const { apikeys } = useApikeys();
   const { entries } = useEntries();
 
   const emoji: Record<Sonarr.EventType, string> = {
@@ -23,6 +25,7 @@ const Dashboard = () => {
 
   async function addTestData() {
     const token = await AuthUser.getIdToken();
+    // TODO: Remove this hardcoded apikey
     const endpoint = getAbsoluteURL('/api/hook/sonarr');
     await fetch(endpoint, {
       method: 'POST',
@@ -54,6 +57,7 @@ const Dashboard = () => {
 
   return (
     <LoggedInLayout title="Dashboard">
+      <LinkGenerator />
       <button onClick={() => addTestData()}>Add sonarr test data</button>
       <ul role="list" className="divide-y divide-gray-200">
         {entries && entries.length > 0 ? (
