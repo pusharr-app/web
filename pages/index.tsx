@@ -38,15 +38,27 @@ const Demo = () => {
                   qui lorem cupidatat commodo.
                 </p>
               </div>
-              <div className="my-5">
-                <a
-                  href="/login"
-                  type="submit"
-                  className="rounded-md border border-transparent px-5 py-3 bg-indigo-600 text-base font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:px-10"
-                >
-                  Login
-                </a>
-              </div>
+              {AuthUser.id ? (
+                <div className="my-5">
+                  <a
+                    href="/dashboard"
+                    type="submit"
+                    className="rounded-md border border-transparent px-5 py-3 bg-indigo-600 text-base font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:px-10"
+                  >
+                    Go to dashboard
+                  </a>
+                </div>
+              ) : (
+                <div className="my-5">
+                  <a
+                    href="/login"
+                    type="submit"
+                    className="rounded-md border border-transparent px-5 py-3 bg-indigo-600 text-base font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:px-10"
+                  >
+                    Login
+                  </a>
+                </div>
+              )}
               <div className="mt-6">
                 <div className="inline-flex items-center divide-x divide-gray-300">
                   <div className="flex-shrink-0 flex pr-5">

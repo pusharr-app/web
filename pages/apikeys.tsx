@@ -1,7 +1,6 @@
 import React from 'react';
 import { useAuthUser, withAuthUser, AuthAction } from 'next-firebase-auth';
 import Header from '../components/Header';
-import DemoPageLinks from '../components/DemoPageLinks';
 import FullPageLoader from '../components/FullPageLoader';
 import getAbsoluteURL from '../utils/getAbsoluteURL';
 import useSWR, { mutate } from 'swr';
