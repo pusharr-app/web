@@ -6,11 +6,19 @@ import getAbsoluteURL from '../utils/getAbsoluteURL';
 import { mutate } from 'swr';
 import { useEntries } from '../services/api';
 import { LoggedInLayout } from '../components/LoggedInLayout';
+import { Sonarr } from '../types/Sonarr';
 
 const Dashboard = () => {
   const AuthUser = useAuthUser();
 
   const { entries } = useEntries();
+
+  const emoji: Record<Sonarr.EventType, string> = {
+    Grab: '🤏',
+    Download: '💾',
+    Rename: '✔️',
+    Test: '🧪',
+  };
 
   async function addTestData() {
     const token = await AuthUser.getIdToken();
@@ -60,10 +68,14 @@ const Dashboard = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="text-sm font-medium">
-                        {entry.series.title}
+                        {emoji[entry.eventType]}{' '}
+                        <strong>{entry.series.title}</strong>
                       </h3>
                       <p className="text-sm text-gray-500">
-                        From {entry.__source}
+                        {entry.episodes &&
+                          entry.episodes.map((episode) => (
+                            <p>{episode.title}</p>
+                          ))}
                       </p>
                     </div>
                     <p className="text-sm text-gray-500 text-right">

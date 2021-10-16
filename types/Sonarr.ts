@@ -1,5 +1,5 @@
 export declare module Sonarr {
-  type EventType = 'Grab' | 'Download' | 'Rename' | 'Test';
+  export type EventType = 'Grab' | 'Download' | 'Rename' | 'Test';
 
   interface Series {
     id: number;
