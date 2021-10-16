@@ -11,12 +11,7 @@ export const get =
       headers: {
         Authorization: token!,
       },
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        console.log('json', json);
-        return json;
-      });
+    }).then((res) => res.json());
     if (pick) {
       return json[pick];
     }

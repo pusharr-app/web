@@ -17,7 +17,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       __source: 'sonarr',
       __createdAt: new Date(),
     };
-    console.log('event', event);
     // TODO: Verify event against interfaces
     await redis.lpush(key, JSON.stringify(event));
     return res.status(200).json({ added: true });

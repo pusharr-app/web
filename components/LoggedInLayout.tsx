@@ -15,14 +15,12 @@ export const LoggedInLayout: React.FC<{ title: string }> = ({
 }) => {
   const AuthUser = useAuthUser();
   const router = useRouter();
-  console.log(router.pathname);
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
     { name: 'Apikeys', href: '/apikeys', icon: UsersIcon },
   ];
 
-  console.log(AuthUser);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (

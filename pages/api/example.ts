@@ -21,7 +21,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   } else {
     try {
       const user = await verifyIdToken(token);
-      console.log('user', user);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);
