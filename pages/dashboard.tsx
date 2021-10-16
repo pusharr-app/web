@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuthUser, withAuthUser, AuthAction } from 'next-firebase-auth';
-import Header from '../components/Header';
+import TimeAgo from 'react-timeago';
 import FullPageLoader from '../components/FullPageLoader';
 import getAbsoluteURL from '../utils/getAbsoluteURL';
 import { mutate } from 'swr';
@@ -58,14 +58,20 @@ const Dashboard = () => {
                 />
                 <div className="flex-1 space-y-1">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-medium">
-                      {entry.series.title}
-                    </h3>
-                    <p className="text-sm text-gray-500">{entry.eventType}</p>
+                    <div>
+                      <h3 className="text-sm font-medium">
+                        {entry.series.title}
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        From {entry.__source}
+                      </p>
+                    </div>
+                    <p className="text-sm text-gray-500 text-right">
+                      {entry.__source}
+                      <br />
+                      <TimeAgo date={entry.__createdAt} />
+                    </p>
                   </div>
-                  <p className="text-sm text-gray-500">
-                    From {entry.__source} @ {entry.__createdAt}
-                  </p>
                 </div>
               </div>
             </li>
