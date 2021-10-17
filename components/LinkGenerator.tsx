@@ -7,7 +7,7 @@ export const LinkGenerator: React.FC = () => {
   const [apikey, setApikey] = useState<string>();
   const [service, setService] = useState('sonarr');
 
-  const url = `https://pusharr.vercel.com/api/hook/${service}?apikey=${apikey}`;
+  const url = `https://pusharr.vercel.app/api/hook/${service}?apikey=${apikey}`;
 
   function copyUrl() {
     navigator.clipboard.writeText(url);

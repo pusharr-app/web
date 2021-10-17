@@ -26,7 +26,7 @@ const apiWrapper =
         const valid = v.validate(req.body, options.params);
         if (valid !== true) {
           const errors = valid as ValidationError[];
-          console.error('Validation error:', errors);
+          console.error('Validation error:', errors, req.body);
           throw new Error(errors[0].message);
         }
       }
