@@ -29,7 +29,7 @@ const apiWrapper =
           throw new Error(errors[0].message);
         }
       }
-      await fn(req, res);
+      return fn(req, res);
     } catch (error: any) {
       res.status(400).json({
         error: error.message,
