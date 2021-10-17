@@ -4,7 +4,7 @@ import TimeAgo from 'react-timeago';
 import FullPageLoader from '../components/FullPageLoader';
 import getAbsoluteURL from '../utils/getAbsoluteURL';
 import { mutate } from 'swr';
-import { useApikeys, useEntries } from '../services/api';
+import { useEntries } from '../services/api';
 import { LoggedInLayout } from '../components/LoggedInLayout';
 import { Sonarr } from '../types/Sonarr';
 import { ExclamationIcon } from '@heroicons/react/outline';
@@ -13,7 +13,6 @@ import { LinkGenerator } from '../components/LinkGenerator';
 const Dashboard = () => {
   const AuthUser = useAuthUser();
 
-  const { apikeys } = useApikeys();
   const { entries } = useEntries();
 
   const emoji: Record<Sonarr.EventType, string> = {
@@ -25,7 +24,6 @@ const Dashboard = () => {
 
   async function addTestData() {
     const token = await AuthUser.getIdToken();
-    // TODO: Remove this hardcoded apikey
     const endpoint = getAbsoluteURL('/api/hook/sonarr');
     await fetch(endpoint, {
       method: 'POST',
@@ -73,7 +71,9 @@ const Dashboard = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="text-sm font-medium">
-                        {emoji[entry.eventType]}{' '}
+                        <span title={entry.eventType}>
+                          {emoji[entry.eventType]}
+                        </span>{' '}
                         <strong>{entry.series.title}</strong>
                       </h3>
                       <p className="text-sm text-gray-500">
