@@ -1,6 +1,6 @@
 import { AuthUserContext, useAuthUser } from 'next-firebase-auth';
 import useSWR from 'swr';
-import { Sonarr } from '../types/Sonarr';
+import { Event } from '../types/Event';
 import getAbsoluteURL from '../utils/getAbsoluteURL';
 
 export const get =
@@ -20,7 +20,7 @@ export const get =
 
 export function useEntries() {
   const AuthUser = useAuthUser();
-  const { data, error } = useSWR<Sonarr.Event[]>(
+  const { data, error } = useSWR<Event[]>(
     `/api/entries`,
     get(AuthUser, 'entries'),
   );

@@ -1,31 +1,23 @@
 import React from 'react';
 import { useAuthUser, withAuthUser, AuthAction } from 'next-firebase-auth';
-import TimeAgo from 'react-timeago';
 import FullPageLoader from '../components/FullPageLoader';
 import getAbsoluteURL from '../utils/getAbsoluteURL';
 import { mutate } from 'swr';
 import { useEntries } from '../services/api';
 import { LoggedInLayout } from '../components/LoggedInLayout';
-import { Sonarr } from '../types/Sonarr';
 import { ExclamationIcon } from '@heroicons/react/outline';
 import { LinkGenerator } from '../components/LinkGenerator';
 import toast from 'react-hot-toast';
+import { EventRow } from '../components/EventRow';
 
 const Dashboard = () => {
   const AuthUser = useAuthUser();
 
   const { entries } = useEntries();
 
-  const emoji: Record<Sonarr.EventType, string> = {
-    Grab: '🤏',
-    Download: '💾',
-    Rename: '✔️',
-    Test: '🧪',
-  };
-
   async function addTestData() {
     const token = await AuthUser.getIdToken();
-    const endpoint = getAbsoluteURL('/api/hook/sonarr');
+    const endpoint = getAbsoluteURL('/api/hook/radarr');
     const res = await fetch(endpoint, {
       method: 'POST',
       headers: {
@@ -34,20 +26,25 @@ const Dashboard = () => {
       },
       body: JSON.stringify({
         eventType: 'Test',
-        series: {
+        movie: {
           id: 1,
           title: 'Test Title',
-          path: 'C:\\testpath',
-          tvdbId: 1234,
+          releaseDate: '1970-01-01',
         },
-        episodes: [
-          {
-            id: 123,
-            episodeNumber: 1,
-            seasonNumber: 1,
-            title: 'Test title',
-          },
-        ],
+        remoteMovie: {
+          tmdbId: 1234,
+          imdbId: '5678',
+          title: 'Test title',
+          year: 1970,
+        },
+        release: {
+          quality: 'Test Quality',
+          qualityVersion: 1,
+          releaseGroup: 'Test Group',
+          releaseTitle: 'Test Title',
+          indexer: 'Test Indexer',
+          size: 9999999,
+        },
       }),
     });
     if (!res.ok) {
@@ -62,42 +59,11 @@ const Dashboard = () => {
   return (
     <LoggedInLayout title="Dashboard">
       <LinkGenerator />
-      <button onClick={() => addTestData()}>Add sonarr test data</button>
+      <button onClick={() => addTestData()}>Add radarr test data</button>
       <ul role="list" className="divide-y divide-gray-200">
         {entries && entries.length > 0 ? (
           entries.map((entry) => (
-            <li key={entry.__createdAt.toString()} className="py-4">
-              <div className="flex space-x-3">
-                <img
-                  className="h-6 w-6 rounded-full"
-                  src="https://artworks.thetvdb.com/banners/posters/5d2781b5c9f50.jpg"
-                  alt=""
-                />
-                <div className="flex-1 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-sm font-medium">
-                        <span title={entry.eventType}>
-                          {emoji[entry.eventType]}
-                        </span>{' '}
-                        <strong>{entry.series.title}</strong>
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        {entry.episodes &&
-                          entry.episodes.map((episode) => (
-                            <p>{episode.title}</p>
-                          ))}
-                      </p>
-                    </div>
-                    <p className="text-sm text-gray-500 text-right">
-                      {entry.__source}
-                      <br />
-                      <TimeAgo date={entry.__createdAt} />
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </li>
+            <EventRow key={entry.__createdAt.toString()} event={entry} />
           ))
         ) : (
           <div className="flex content-center mt-5">

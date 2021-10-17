@@ -35,7 +35,7 @@ export const LinkGenerator: React.FC = () => {
               Select an apikey
             </option>
             {apikeys.map((key) => (
-              <option>{key}</option>
+              <option key={key}>{key}</option>
             ))}
           </select>
         </div>
@@ -54,6 +54,7 @@ export const LinkGenerator: React.FC = () => {
             value={service}
           >
             <option value="sonarr">Sonarr</option>
+            <option value="radarr">Radarr</option>
           </select>
         </div>
       </div>

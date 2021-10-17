@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { schema } from 'ts-transformer-json-schema';
 import initAuth from '../../../utils/initAuth';
 import redis from '../../../utils/redis';
-import type { Sonarr } from '../../../types/Sonarr';
+import type { Radarr } from '../../../types/Radarr';
 import { verifyIdToken } from 'next-firebase-auth';
 import { getUserByKey } from '../../../utils/apikeys';
 import { apiWrapper } from '../../../utils/apiWrapper';
@@ -23,9 +23,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       throw new Error('wow you thought..');
     }
     const key = `entries:${userid}`;
-    const event: Sonarr.Event = {
+    const event: Radarr.Event = {
       ...req.body,
-      __source: 'sonarr',
+      __source: 'radarr',
       __createdAt: new Date(),
     };
     await redis.lpush(key, JSON.stringify(event));
@@ -34,5 +34,5 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export default apiWrapper(handler, {
-  params: schema<Omit<Sonarr.Event, '__source' | '__createdAt'>>(),
+  params: schema<Omit<Radarr.Event, '__source' | '__createdAt'>>(),
 });
