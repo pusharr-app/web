@@ -26,6 +26,7 @@ const apiWrapper =
         const valid = v.validate(req.body, options.params);
         if (valid !== true) {
           const errors = valid as ValidationError[];
+          console.error('Validation error:', errors);
           throw new Error(errors[0].message);
         }
       }
@@ -48,7 +49,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       userid = user.id;
     }
     if (!userid) {
-      throw new Error('wow you thougth..');
+      throw new Error('wow you thought..');
     }
     const key = `entries:${userid}`;
     const event: Sonarr.Event = {
