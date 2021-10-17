@@ -1,19 +1,10 @@
-import React from 'react'
-
-const styles = {
-  container: {
-    width: '100vw',
-    height: '100vh',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-}
+import React from 'react';
+import { LoggedInLayout } from './LoggedInLayout';
 
 const FullPageLoader = () => (
-  <div style={styles.container}>
+  <LoggedInLayout title="Loading">
     <h3>Loading...</h3>
-  </div>
-)
+  </LoggedInLayout>
+);
 
-export default FullPageLoader
+export default FullPageLoader;
