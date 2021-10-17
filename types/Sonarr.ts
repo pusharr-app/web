@@ -1,6 +1,8 @@
 export declare module Sonarr {
   export type EventType = 'Grab' | 'Download' | 'Rename' | 'Test';
 
+  type Date = string;
+
   interface Series {
     id: number;
     title: string;
@@ -15,8 +17,8 @@ export declare module Sonarr {
     title: string;
     airDate?: string;
     airDateUtc?: Date;
-    quality: string;
-    qualityVersion?: number;
+    quality?: string;
+    qualityVersion: number;
   }
 
   interface Release {

@@ -9,6 +9,7 @@ import { LoggedInLayout } from '../components/LoggedInLayout';
 import { Sonarr } from '../types/Sonarr';
 import { ExclamationIcon } from '@heroicons/react/outline';
 import { LinkGenerator } from '../components/LinkGenerator';
+import toast from 'react-hot-toast';
 
 const Dashboard = () => {
   const AuthUser = useAuthUser();
@@ -25,7 +26,7 @@ const Dashboard = () => {
   async function addTestData() {
     const token = await AuthUser.getIdToken();
     const endpoint = getAbsoluteURL('/api/hook/sonarr');
-    await fetch(endpoint, {
+    const res = await fetch(endpoint, {
       method: 'POST',
       headers: {
         Authorization: token!,
@@ -50,6 +51,12 @@ const Dashboard = () => {
         ],
       }),
     });
+    if (!res.ok) {
+      const { error } = await res.json();
+      if (error) {
+        toast.error(error);
+      }
+    }
     mutate('/api/entries');
   }
 
