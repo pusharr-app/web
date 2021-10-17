@@ -65,5 +65,5 @@ export declare module Radarr {
     eventType: 'Rename';
   }
 
-  export type Event = TestEvent | GrabEvent | DownloadEvent | TestEvent;
+  export type Event = TestEvent | GrabEvent | DownloadEvent | RenameEvent;
 }

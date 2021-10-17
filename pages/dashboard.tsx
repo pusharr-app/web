@@ -5,7 +5,6 @@ import getAbsoluteURL from '../utils/getAbsoluteURL';
 import { mutate } from 'swr';
 import { useEntries } from '../services/api';
 import { LoggedInLayout } from '../components/LoggedInLayout';
-import { ExclamationIcon } from '@heroicons/react/outline';
 import { LinkGenerator } from '../components/LinkGenerator';
 import toast from 'react-hot-toast';
 import { EventRow } from '../components/EventRow';
@@ -59,30 +58,59 @@ const Dashboard = () => {
   return (
     <LoggedInLayout title="Dashboard">
       <LinkGenerator />
-      <button onClick={() => addTestData()}>Add radarr test data</button>
-      <ul role="list" className="divide-y divide-gray-200">
-        {entries && entries.length > 0 ? (
-          entries.map((entry) => (
-            <EventRow key={entry.__createdAt.toString()} event={entry} />
-          ))
-        ) : (
-          <div className="flex content-center mt-5">
-            <button
-              type="button"
-              onClick={() => addTestData()}
-              className="block w-4/5 border-2 border-gray-300 border-dashed rounded-lg p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              <ExclamationIcon className="h-6 w-6" aria-hidden="true" />
-              <button
-                type="button"
-                className="mt-2 block text-sm font-medium text-gray-900"
-              >
-                Add a test row
-              </button>
-            </button>
+
+      <div className="flex flex-col mt-5">
+        <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Media
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Info
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Status
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Source
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      When
+                    </th>
+                    <th scope="col" className="relative px-6 py-3">
+                      <span className="sr-only">Edit</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {entries.map((event) => (
+                    <EventRow event={event} key={event.__createdAt} />
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        )}
-      </ul>
+        </div>
+      </div>
     </LoggedInLayout>
   );
 };

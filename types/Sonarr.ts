@@ -64,5 +64,5 @@ export declare module Sonarr {
     eventType: 'Rename';
   }
 
-  export type Event = TestEvent | GrabEvent | DownloadEvent | TestEvent;
+  export type Event = TestEvent | GrabEvent | DownloadEvent | RenameEvent;
 }
