@@ -18,7 +18,7 @@ export declare module Sonarr {
     airDate?: string;
     airDateUtc?: Date;
     quality?: string;
-    qualityVersion: number;
+    qualityVersion?: number;
   }
 
   interface Release {

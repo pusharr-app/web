@@ -46,7 +46,6 @@ const Dashboard = () => {
             episodeNumber: 1,
             seasonNumber: 1,
             title: 'Test title',
-            qualityVersion: 0,
           },
         ],
       }),
