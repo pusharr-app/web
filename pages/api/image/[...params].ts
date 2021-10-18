@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import arrayBufferToBuffer from 'arraybuffer-to-buffer';
+import sharp from 'sharp';
 
 async function getMovieImage(id: string | number) {
   const res = await fetch(
@@ -7,7 +8,7 @@ async function getMovieImage(id: string | number) {
   );
   const json = await res.json();
   const path = json.movie_results[0].backdrop_path;
-  return `https://image.tmdb.org/t/p/w500${path}`;
+  return `https://image.tmdb.org/t/p/w1280${path}`;
 }
 
 async function getShowImage(id: string | number) {
@@ -16,7 +17,7 @@ async function getShowImage(id: string | number) {
   );
   const json = await res.json();
   const path = json.tv_results[0].backdrop_path;
-  return `https://image.tmdb.org/t/p/w500${path}`;
+  return `https://image.tmdb.org/t/p/w1280${path}`;
 }
 
 export default async function handler(
@@ -46,5 +47,10 @@ export default async function handler(
     'Content-Type': imageRes.headers.get('Content-Type') ?? 'image/jpeg',
     // 'Cache-Control': `max-age=${ONE_DAY}, public`,
   });
-  res.end(arrayBufferToBuffer(await blob.arrayBuffer()));
+  const buffer = await arrayBufferToBuffer(await blob.arrayBuffer());
+  const image = sharp(buffer).resize(200, 200, {
+    withoutEnlargement: true,
+    fit: 'cover',
+  });
+  res.end(await image.toBuffer());
 }
