@@ -16,7 +16,7 @@ export const LinkGenerator: React.FC<{ apikeys: KeyInfo[] }> = ({
   }
 
   return (
-    <div className="rounded-md bg-gray-700 p-4">
+    <div className="overflow-x-auto rounded-md bg-gray-700 p-4">
       <h3 className="text-base text-white">Webhook links</h3>
       <div className="flex space-x-2 justify-between">
         <div className="flex-grow">
