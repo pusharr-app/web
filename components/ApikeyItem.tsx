@@ -10,9 +10,11 @@ import TimeAgo from 'react-timeago';
 export function ApikeyItem({
   apikey: key,
   idx,
+  apikeysNo,
 }: {
   apikey: KeyInfo;
   idx: number;
+  apikeysNo: number;
 }) {
   const AuthUser = useAuthUser();
   const [open, setOpen] = useState(false);
@@ -33,6 +35,7 @@ export function ApikeyItem({
   }
 
   const cancelButtonRef = useRef(null);
+  const disabled = apikeysNo < 2;
 
   return (
     <>
@@ -49,8 +52,10 @@ export function ApikeyItem({
         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
           <button
             type="button"
-            className="inline-flex items-center m-2 px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            title={disabled ? "Can't remove the last API key" : ''}
+            className="inline-flex items-center m-2 px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={() => setOpen(true)}
+            disabled={disabled}
           >
             Delete
           </button>
@@ -105,7 +110,7 @@ export function ApikeyItem({
                       as="h3"
                       className="text-lg leading-6 font-medium text-gray-900"
                     >
-                      Remove apikey
+                      Really remove API key {key.name}?
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">

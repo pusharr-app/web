@@ -68,7 +68,12 @@ const Apikeys = () => {
                 </thead>
                 <tbody>
                   {apikeys.map((key, idx) => (
-                    <ApikeyItem key={key.key} apikey={key} idx={idx} />
+                    <ApikeyItem
+                      key={key.key}
+                      apikey={key}
+                      idx={idx}
+                      apikeysNo={apikeys.length}
+                    />
                   ))}
                 </tbody>
               </table>
