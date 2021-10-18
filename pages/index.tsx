@@ -6,7 +6,6 @@ import {
   withAuthUserTokenSSR,
 } from 'next-firebase-auth';
 import { ChevronRightIcon, StarIcon } from '@heroicons/react/solid';
-import useSWR from 'swr';
 
 const Demo = () => {
   const AuthUser = useAuthUser();
