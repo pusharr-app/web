@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { useApikeys } from '../services/api';
+import { KeyInfo } from '../utils/apikeys';
 
-export const LinkGenerator: React.FC = () => {
-  const { apikeys } = useApikeys();
-  const [apikey, setApikey] = useState<string>();
+export const LinkGenerator: React.FC<{ apikeys: KeyInfo[] }> = ({
+  apikeys,
+}) => {
+  const [apikey, setApikey] = useState<string>(() => apikeys[0]?.key ?? 'none');
   const [service, setService] = useState('sonarr');
 
-  const url = `https://pusharr.vercel.app/api/hook/${service}?apikey=${apikey}`;
+  const url = `https://www.pusharr.com/api/hook/${service}?apikey=${apikey}`;
 
   function copyUrl() {
     navigator.clipboard.writeText(url);
@@ -16,7 +17,7 @@ export const LinkGenerator: React.FC = () => {
 
   return (
     <div className="rounded-md bg-gray-700 p-4">
-      <h3 className="text-base text-white">Generate links</h3>
+      <h3 className="text-base text-white">Webhook links</h3>
       <div className="flex space-x-2 justify-between">
         <div className="flex-grow">
           <label
@@ -30,9 +31,9 @@ export const LinkGenerator: React.FC = () => {
             name="apikey"
             onChange={(event) => setApikey(event.target.value)}
             className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-            defaultValue={'none'}
+            value={apikey}
           >
-            <option disabled value={'none'}>
+            <option disabled value="none">
               Select an apikey
             </option>
             {apikeys.map((key) => (
@@ -66,7 +67,7 @@ export const LinkGenerator: React.FC = () => {
           Paste the following link into your webhook settings:{' '}
           <button type="button" onClick={() => copyUrl()}>
             <code className="whitespace-nowrap">{url}</code>
-          </button>
+          </button>{' '}
           (click on it to copy)
         </p>
       )}

@@ -3,7 +3,7 @@ import { useAuthUser, withAuthUser, AuthAction } from 'next-firebase-auth';
 import FullPageLoader from '../components/FullPageLoader';
 import getAbsoluteURL from '../utils/getAbsoluteURL';
 import { mutate } from 'swr';
-import { useEntries } from '../services/api';
+import { useApikeys, useEntries } from '../services/api';
 import { LoggedInLayout } from '../components/LoggedInLayout';
 import { LinkGenerator } from '../components/LinkGenerator';
 import toast from 'react-hot-toast';
@@ -14,6 +14,7 @@ const Dashboard = () => {
   const AuthUser = useAuthUser();
 
   const { entries } = useEntries();
+  const { apikeys } = useApikeys();
 
   async function addTestData() {
     const token = await AuthUser.getIdToken();
@@ -58,7 +59,7 @@ const Dashboard = () => {
 
   return (
     <LoggedInLayout title="Dashboard">
-      <LinkGenerator />
+      {apikeys.length > 0 && <LinkGenerator apikeys={apikeys} />}
 
       <div className="flex flex-col mt-5">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
