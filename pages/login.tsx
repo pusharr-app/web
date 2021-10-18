@@ -12,19 +12,12 @@ const Login = () => {
       <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
-            <img className="h-12 w-auto" src="/logo.png" alt="Pusharr" />
+            <a href="/">
+              <img className="h-12 w-auto" src="/logo.png" alt="Pusharr" />
+            </a>
             <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
               Sign in to your account
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
-              Or{' '}
-              <a
-                href="#"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                sign up now
-              </a>
-            </p>
           </div>
 
           <div className="mt-8">
