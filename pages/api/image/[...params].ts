@@ -45,7 +45,7 @@ export default async function handler(
 
   res.writeHead(200, {
     'Content-Type': imageRes.headers.get('Content-Type') ?? 'image/jpeg',
-    // 'Cache-Control': `max-age=${ONE_DAY}, public`,
+    'Cache-Control': `max-age=${ONE_DAY}, public`,
   });
   const buffer = await arrayBufferToBuffer(await blob.arrayBuffer());
   const image = sharp(buffer).resize(200, 200, {
