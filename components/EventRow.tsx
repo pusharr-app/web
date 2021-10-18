@@ -120,7 +120,28 @@ const Radarr: React.FC<{ event: Radarr.Event }> = ({ event }) => {
   );
 };
 
+const Test: React.FC<{ event: Event }> = ({ event }) => {
+  return (
+    <tr>
+      <td colSpan={4} className="px-6 py-1 whitespace-nowrap">
+        <div className="pl-14 text-xs font-medium text-gray-900">
+          Test event from {event.__source}
+        </div>
+      </td>
+      <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500">
+        <TimeAgo date={event.__createdAt} />
+      </td>
+      <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500">
+        <span></span>
+      </td>
+    </tr>
+  );
+};
+
 export const EventRow: React.FC<{ event: Event }> = ({ event }) => {
+  if (event.eventType === 'Test') {
+    return <Test event={event} />;
+  }
   if (event.__source === 'sonarr') {
     return <Sonarr event={event} />;
   }
