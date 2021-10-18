@@ -6,18 +6,10 @@ import {
   withAuthUserTokenSSR,
 } from 'next-firebase-auth';
 import { ChevronRightIcon, StarIcon } from '@heroicons/react/solid';
+import { get } from '../services/api';
 
-const Demo = () => {
+const Demo: React.FC<any> = ({ commit }) => {
   const AuthUser = useAuthUser();
-  const [commit, setCommit] = useState<any>();
-
-  useEffect(() => {
-    fetch('https://api.github.com/repos/pusharr-app/web/commits/main')
-      .then((res) => res.json())
-      .then((json) => {
-        setCommit(json);
-      });
-  }, []);
 
   console.log('commit', commit);
   return (
@@ -168,7 +160,16 @@ const Demo = () => {
 
 export const getServerSideProps = withAuthUserTokenSSR({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
-})();
+})(async ({ AuthUser, req }) => {
+  const commit = await get(AuthUser)(
+    'https://api.github.com/repos/pusharr-app/web/commits/main',
+  );
+  return {
+    props: {
+      commit,
+    },
+  };
+});
 
 export default withAuthUser({
   whenAuthed: AuthAction.REDIRECT_TO_APP,

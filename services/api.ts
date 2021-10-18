@@ -1,3 +1,4 @@
+import { IncomingMessage } from 'http';
 import { NextApiRequest } from 'next';
 import { AuthUser, useAuthUser } from 'next-firebase-auth';
 import { useEffect } from 'react';
@@ -10,7 +11,9 @@ export const get =
   (AuthUser: AuthUser, pick?: string, req?: NextApiRequest) =>
   async (url: string) => {
     const token = await AuthUser.getIdToken();
-    const endpoint = getAbsoluteURL(url, req);
+    const endpoint = url.startsWith('https://')
+      ? url
+      : getAbsoluteURL(url, req);
     const json = await fetch(endpoint, {
       headers: {
         Authorization: token!,
