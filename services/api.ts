@@ -1,4 +1,5 @@
-import { AuthUserContext, useAuthUser } from 'next-firebase-auth';
+import { NextApiRequest } from 'next';
+import { AuthUser, useAuthUser } from 'next-firebase-auth';
 import { useEffect } from 'react';
 import useSWR, { mutate } from 'swr';
 import { Event } from '../types/Event';
@@ -6,9 +7,10 @@ import { KeyInfo } from '../utils/apikeys';
 import getAbsoluteURL from '../utils/getAbsoluteURL';
 
 export const get =
-  (AuthUser: AuthUserContext, pick?: string) => async (url: string) => {
+  (AuthUser: AuthUser, pick?: string, req?: NextApiRequest) =>
+  async (url: string) => {
     const token = await AuthUser.getIdToken();
-    const endpoint = getAbsoluteURL(url);
+    const endpoint = getAbsoluteURL(url, req);
     const json = await fetch(endpoint, {
       headers: {
         Authorization: token!,
@@ -20,11 +22,12 @@ export const get =
     return json;
   };
 
-export function useEntries() {
+export function useEntries(fallbackData?: Event[]) {
   const AuthUser = useAuthUser();
   const { data, error } = useSWR<Event[]>(
     `/api/entries`,
     get(AuthUser, 'entries'),
+    { fallbackData },
   );
 
   return {
@@ -34,7 +37,7 @@ export function useEntries() {
   };
 }
 
-export const createApiKey = async (name: string, AuthUser: AuthUserContext) => {
+export const createApiKey = async (name: string, AuthUser: AuthUser) => {
   const token = await AuthUser.getIdToken();
   const endpoint = getAbsoluteURL('/api/apikeys');
   await fetch(endpoint, {
@@ -48,11 +51,12 @@ export const createApiKey = async (name: string, AuthUser: AuthUserContext) => {
   mutate('/api/apikeys');
 };
 
-export function useApikeys() {
+export function useApikeys(fallbackData?: KeyInfo[]) {
   const AuthUser = useAuthUser();
   const { data, error } = useSWR<KeyInfo[]>(
     `/api/apikeys`,
     get(AuthUser, 'keys'),
+    { fallbackData },
   );
   useEffect(() => {
     if (data && data.length === 0) {

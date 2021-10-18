@@ -1,20 +1,28 @@
 import React from 'react';
-import { useAuthUser, withAuthUser, AuthAction } from 'next-firebase-auth';
-import FullPageLoader from '../components/FullPageLoader';
+import {
+  useAuthUser,
+  withAuthUser,
+  AuthAction,
+  withAuthUserTokenSSR,
+} from 'next-firebase-auth';
 import getAbsoluteURL from '../utils/getAbsoluteURL';
 import { mutate } from 'swr';
-import { useApikeys, useEntries } from '../services/api';
+import { get, useApikeys, useEntries } from '../services/api';
 import { LoggedInLayout } from '../components/LoggedInLayout';
 import { LinkGenerator } from '../components/LinkGenerator';
 import toast from 'react-hot-toast';
 import { EventRow } from '../components/EventRow';
 import { NoEvents } from '../components/NoEvents';
 
-const Dashboard = () => {
+// TODO: Solve how to not use any here
+const Dashboard: React.FC<any> = ({
+  events: initialEvents,
+  keys: initialKeys,
+}) => {
   const AuthUser = useAuthUser();
 
-  const { entries } = useEntries();
-  const { apikeys } = useApikeys();
+  const { entries } = useEntries(initialEvents);
+  const { apikeys } = useApikeys(initialKeys);
 
   async function addTestData() {
     const token = await AuthUser.getIdToken();
@@ -60,6 +68,10 @@ const Dashboard = () => {
   return (
     <LoggedInLayout title="Dashboard">
       {apikeys.length > 0 && <LinkGenerator apikeys={apikeys} />}
+
+      <button type="button" onClick={() => addTestData()}>
+        Add test data
+      </button>
 
       <div className="flex flex-col mt-5">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -121,8 +133,21 @@ const Dashboard = () => {
   );
 };
 
+export const getServerSideProps = withAuthUserTokenSSR({
+  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+})(async ({ AuthUser, req }) => {
+  // @ts-ignore
+  const events = await get(AuthUser, 'entries', req)('/api/entries');
+  // @ts-ignore
+  const keys = await get(AuthUser, 'keys', req)('/api/apikeys');
+  return {
+    props: {
+      events,
+      keys,
+    },
+  };
+});
+
 export default withAuthUser({
-  whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
   whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
-  LoaderComponent: FullPageLoader,
 })(Dashboard);
