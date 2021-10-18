@@ -8,6 +8,7 @@ import { LoggedInLayout } from '../components/LoggedInLayout';
 import { LinkGenerator } from '../components/LinkGenerator';
 import toast from 'react-hot-toast';
 import { EventRow } from '../components/EventRow';
+import { NoEvents } from '../components/NoEvents';
 
 const Dashboard = () => {
   const AuthUser = useAuthUser();
@@ -102,9 +103,13 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {entries.map((event) => (
-                    <EventRow event={event} key={event.__createdAt} />
-                  ))}
+                  {entries.length === 0 ? (
+                    <NoEvents />
+                  ) : (
+                    entries.map((event) => (
+                      <EventRow event={event} key={event.__createdAt} />
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
