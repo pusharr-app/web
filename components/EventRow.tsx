@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Event } from '../types/Event';
 import { Sonarr } from '../types/Sonarr';
 import TimeAgo from 'react-timeago';
 import { Radarr } from '../types/Radarr';
+import { AnnotationIcon } from '@heroicons/react/solid';
 
 const emoji: Record<Sonarr.EventType, string> = {
   Grab: '🤏',
@@ -11,7 +12,18 @@ const emoji: Record<Sonarr.EventType, string> = {
   Test: '🧪',
 };
 
-const Sonarr: React.FC<{ event: Sonarr.Event }> = ({ event }) => {
+const ToggleFullEvent: React.FC<{ toggleOpen: () => void }> = ({
+  toggleOpen,
+}) => (
+  <button type="button" onClick={toggleOpen} title="Toggle full event">
+    <AnnotationIcon className="h-4 w-4 ml-2 text-black" aria-hidden="true" />
+  </button>
+);
+
+const Sonarr: React.FC<{ event: Sonarr.Event; toggleOpen: () => void }> = ({
+  event,
+  toggleOpen,
+}) => {
   if (event.eventType === 'Rename') return null;
   const ep = event.episodes[0];
   let quality: string;
@@ -59,19 +71,25 @@ const Sonarr: React.FC<{ event: Sonarr.Event }> = ({ event }) => {
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
         <TimeAgo date={event.__createdAt} />
       </td>
-      <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
-        <a
-          target="_blank"
-          href={`https://www.thetvdb.com/?id=${event.series.tvdbId}&tab=series`}
-        >
-          <img src="/tvdb.png" className="inline ml-4 h-8 w-8" />
-        </a>
+      <td className="pr-4 py-4 whitespace-nowrap text-right text-sm font-medium">
+        <div className="flex flex-row content-center justify-end">
+          <a
+            target="_blank"
+            href={`https://www.thetvdb.com/?id=${event.series.tvdbId}&tab=series`}
+          >
+            <img src="/tvdb.png" className="inline ml-4 h-8 w-8" />
+          </a>
+          <ToggleFullEvent toggleOpen={toggleOpen} />
+        </div>
       </td>
     </tr>
   );
 };
 
-const Radarr: React.FC<{ event: Radarr.Event }> = ({ event }) => {
+const Radarr: React.FC<{ event: Radarr.Event; toggleOpen: () => void }> = ({
+  event,
+  toggleOpen,
+}) => {
   if (event.eventType === 'Rename') return null;
   let quality: string;
   if (event.eventType === 'Download') {
@@ -116,18 +134,23 @@ const Radarr: React.FC<{ event: Radarr.Event }> = ({ event }) => {
         <TimeAgo date={event.__createdAt} />
       </td>
       <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
-        <a
-          target="_blank"
-          href={`https://www.imdb.com/title/${event.remoteMovie.imdbId}`}
-        >
-          <img src="/imdb.png" className="inline ml-4 h-8 w-8" />
-        </a>
+        <div className="flex flex-row content-center justify-end">
+          <a
+            target="_blank"
+            href={`https://www.imdb.com/title/${event.remoteMovie.imdbId}`}
+          >
+            <img src="/imdb.png" className="inline ml-4 h-8 w-8" />
+          </a>
+          <ToggleFullEvent toggleOpen={toggleOpen} />
+        </div>
       </td>
     </tr>
   );
 };
 
-const Test: React.FC<{ event: Event }> = ({ event }) => {
+const Test: React.FC<{ event: Event; toggleOpen: () => void }> = ({
+  event,
+}) => {
   return (
     <tr>
       <td colSpan={4} className="px-6 py-1 whitespace-nowrap">
@@ -146,14 +169,31 @@ const Test: React.FC<{ event: Event }> = ({ event }) => {
 };
 
 export const EventRow: React.FC<{ event: Event }> = ({ event }) => {
-  if (event.eventType === 'Test') {
-    return <Test event={event} />;
+  const [open, setOpen] = useState(false);
+  const toggleOpen = () => setOpen((isOpen) => !isOpen);
+  function Row() {
+    // if (event.eventType === 'Test') {
+    //   return <Test event={event} toggleOpen={toggleOpen} />;
+    // }
+    if (event.__source === 'sonarr') {
+      return <Sonarr event={event} toggleOpen={toggleOpen} />;
+    }
+    if (event.__source === 'radarr') {
+      return <Radarr event={event} toggleOpen={toggleOpen} />;
+    }
+    return null;
   }
-  if (event.__source === 'sonarr') {
-    return <Sonarr event={event} />;
-  }
-  if (event.__source === 'radarr') {
-    return <Radarr event={event} />;
-  }
-  return null;
+
+  return (
+    <>
+      <Row />
+      {open && (
+        <tr>
+          <td colSpan={6} className="px-6 py-1">
+            <pre>{JSON.stringify(event, null, 4)}</pre>
+          </td>
+        </tr>
+      )}
+    </>
+  );
 };
