@@ -32,7 +32,7 @@ const Sonarr: React.FC<{ event: Sonarr.Event }> = ({ event }) => {
           <div className="flex-shrink-0 h-10 w-10">
             <img
               className="h-10 w-10 rounded-full"
-              src="https://artworks.thetvdb.com/banners/posters/5d2781b5c9f50.jpg"
+              src={`/api/image/sonarr/${event.series.tvdbId}`}
               alt=""
             />
           </div>
@@ -86,7 +86,7 @@ const Radarr: React.FC<{ event: Radarr.Event }> = ({ event }) => {
           <div className="flex-shrink-0 h-10 w-10">
             <img
               className="h-10 w-10 rounded-full"
-              src="https://artworks.thetvdb.com/banners/posters/5d2781b5c9f50.jpg"
+              src={`/api/image/radarr/${event.remoteMovie.imdbId}`}
               alt=""
             />
           </div>

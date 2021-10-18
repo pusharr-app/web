@@ -24,7 +24,44 @@ const Dashboard: React.FC<any> = ({
   const { events } = useEvents(initialEvents);
   const { apikeys } = useApikeys(initialKeys);
 
-  async function addTestData() {
+  async function addSonarrTestData() {
+    const token = await AuthUser.getIdToken();
+    const endpoint = getAbsoluteURL('/api/hook/sonarr');
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        Authorization: token!,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        eventType: 'Test',
+        series: {
+          id: 1,
+          title: 'Test Title',
+          path: 'C:\\testpath',
+          tvdbId: 377401,
+        },
+        episodes: [
+          {
+            id: 123,
+            episodeNumber: 1,
+            seasonNumber: 1,
+            title: 'Test title',
+            qualityVersion: 0,
+          },
+        ],
+      }),
+    });
+    if (!res.ok) {
+      const { error } = await res.json();
+      if (error) {
+        toast.error(error);
+      }
+    }
+    mutate('/api/events');
+  }
+
+  async function addRadarrTestData() {
     const token = await AuthUser.getIdToken();
     const endpoint = getAbsoluteURL('/api/hook/radarr');
     const res = await fetch(endpoint, {
@@ -42,7 +79,7 @@ const Dashboard: React.FC<any> = ({
         },
         remoteMovie: {
           tmdbId: 1234,
-          imdbId: '5678',
+          imdbId: 'tt0078346',
           title: 'Test title',
           year: 1970,
         },
@@ -69,8 +106,12 @@ const Dashboard: React.FC<any> = ({
     <LoggedInLayout title="Dashboard">
       {apikeys.length > 0 && <LinkGenerator apikeys={apikeys} />}
 
-      <button type="button" onClick={() => addTestData()}>
-        Add test data
+      <button type="button" onClick={() => addRadarrTestData()}>
+        Add Radarr test data
+      </button>
+
+      <button type="button" onClick={() => addSonarrTestData()}>
+        Add Sonarr test data
       </button>
 
       <div className="flex flex-col mt-5">

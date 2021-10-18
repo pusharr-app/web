@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^1.4.1",
     "@heroicons/react": "^1.0.4",
+    "arraybuffer-to-buffer": "^0.0.7",
     "autoprefixer": "^10.3.7",
     "fastest-validator": "^1.11.1",
     "firebase": "^8.9.1",
