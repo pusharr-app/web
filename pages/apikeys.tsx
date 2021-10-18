@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import { useAuthUser, withAuthUser, AuthAction } from 'next-firebase-auth';
-import FullPageLoader from '../components/FullPageLoader';
-import { createApiKey, useApikeys } from '../services/api';
+import {
+  useAuthUser,
+  withAuthUser,
+  AuthAction,
+  withAuthUserTokenSSR,
+} from 'next-firebase-auth';
+import { get, createApiKey, useApikeys } from '../services/api';
 import { ApikeyItem } from '../components/ApikeyItem';
 import { LoggedInLayout } from '../components/LoggedInLayout';
 
-const Apikeys = () => {
+// TODO: Solve how to not use any here
+const Apikeys: React.FC<any> = ({ keys: initialKeys }) => {
   const AuthUser = useAuthUser();
-  const { apikeys, error } = useApikeys();
+  const { apikeys, error } = useApikeys(initialKeys);
   const [newKeyName, setNewKeyName] = useState('');
 
   async function createKey() {
@@ -85,8 +90,18 @@ const Apikeys = () => {
   );
 };
 
+export const getServerSideProps = withAuthUserTokenSSR({
+  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+})(async ({ AuthUser, req }) => {
+  // @ts-ignore
+  const keys = await get(AuthUser, 'keys', req)('/api/apikeys');
+  return {
+    props: {
+      keys,
+    },
+  };
+});
+
 export default withAuthUser({
-  whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
   whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
-  LoaderComponent: FullPageLoader,
 })(Apikeys);
