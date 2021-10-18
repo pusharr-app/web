@@ -106,13 +106,18 @@ const Dashboard: React.FC<any> = ({
     <LoggedInLayout title="Dashboard">
       {apikeys.length > 0 && <LinkGenerator apikeys={apikeys} />}
 
-      <button type="button" onClick={() => addRadarrTestData()}>
-        Add Radarr test data
-      </button>
+      {typeof window !== 'undefined' &&
+        window.location.host.startsWith('localhost') && (
+          <>
+            <button type="button" onClick={() => addRadarrTestData()}>
+              Add Radarr test data
+            </button>
 
-      <button type="button" onClick={() => addSonarrTestData()}>
-        Add Sonarr test data
-      </button>
+            <button type="button" onClick={() => addSonarrTestData()}>
+              Add Sonarr test data
+            </button>
+          </>
+        )}
 
       <div className="flex flex-col mt-5">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
