@@ -22,17 +22,17 @@ export declare module Sonarr {
   }
 
   interface Release {
-    quality: string;
-    qualityVersion: number;
-    size: number;
+    quality?: string;
+    qualityVersion?: number;
+    size?: number;
   }
 
   interface EpisodeFile {
     id: number;
     relativePath: string;
     path: string;
-    quality: string;
-    qualityVersion: number;
+    quality?: string;
+    qualityVersion?: number;
   }
 
   interface Base {
