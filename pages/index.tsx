@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  useAuthUser,
-  withAuthUser,
-  withAuthUserTokenSSR,
-} from 'next-firebase-auth';
+import { useAuthUser, withAuthUser } from 'next-firebase-auth';
 import { ChevronRightIcon, StarIcon } from '@heroicons/react/solid';
 
 const Demo = () => {
@@ -144,7 +140,5 @@ const Demo = () => {
     </div>
   );
 };
-
-export const getServerSideProps = withAuthUserTokenSSR()();
 
 export default withAuthUser()(Demo);
