@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuthUser, withAuthUser } from 'next-firebase-auth';
+import { AuthAction, useAuthUser, withAuthUser } from 'next-firebase-auth';
 import { ChevronRightIcon, StarIcon } from '@heroicons/react/solid';
 
 const Demo = () => {
@@ -141,4 +141,6 @@ const Demo = () => {
   );
 };
 
-export default withAuthUser()(Demo);
+export default withAuthUser({
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
+})(Demo);

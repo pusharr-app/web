@@ -22,16 +22,16 @@ export const get =
     return json;
   };
 
-export function useEntries(fallbackData?: Event[]) {
+export function useEvents(fallbackData?: Event[]) {
   const AuthUser = useAuthUser();
   const { data, error } = useSWR<Event[]>(
-    `/api/entries`,
-    get(AuthUser, 'entries'),
+    `/api/events`,
+    get(AuthUser, 'events'),
     { fallbackData },
   );
 
   return {
-    entries: data ?? [],
+    events: data ?? [],
     isLoading: !error && !data,
     error,
   };

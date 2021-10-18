@@ -22,7 +22,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!userid) {
       throw new Error('wow you thought..');
     }
-    const key = `entries:${userid}`;
+    const key = `events:${userid}`;
     const event: Sonarr.Event = {
       ...req.body,
       __source: 'sonarr',

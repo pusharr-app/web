@@ -7,7 +7,7 @@ import {
 } from 'next-firebase-auth';
 import getAbsoluteURL from '../utils/getAbsoluteURL';
 import { mutate } from 'swr';
-import { get, useApikeys, useEntries } from '../services/api';
+import { get, useApikeys, useEvents } from '../services/api';
 import { LoggedInLayout } from '../components/LoggedInLayout';
 import { LinkGenerator } from '../components/LinkGenerator';
 import toast from 'react-hot-toast';
@@ -21,7 +21,7 @@ const Dashboard: React.FC<any> = ({
 }) => {
   const AuthUser = useAuthUser();
 
-  const { entries } = useEntries(initialEvents);
+  const { events } = useEvents(initialEvents);
   const { apikeys } = useApikeys(initialKeys);
 
   async function addTestData() {
@@ -62,7 +62,7 @@ const Dashboard: React.FC<any> = ({
         toast.error(error);
       }
     }
-    mutate('/api/entries');
+    mutate('/api/events');
   }
 
   return (
@@ -116,10 +116,10 @@ const Dashboard: React.FC<any> = ({
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {entries.length === 0 ? (
+                  {events.length === 0 ? (
                     <NoEvents />
                   ) : (
-                    entries.map((event) => (
+                    events.map((event) => (
                       <EventRow event={event} key={event.__createdAt} />
                     ))
                   )}
@@ -137,7 +137,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
 })(async ({ AuthUser, req }) => {
   // @ts-ignore
-  const events = await get(AuthUser, 'entries', req)('/api/entries');
+  const events = await get(AuthUser, 'events', req)('/api/events');
   // @ts-ignore
   const keys = await get(AuthUser, 'keys', req)('/api/apikeys');
   return {

@@ -8,10 +8,10 @@ initAuth();
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const token = req.headers.authorization;
   const user = await verifyIdToken(token ?? '');
-  const key = `entries:${user.id}`;
+  const key = `events:${user.id}`;
 
-  const entries = await redis.lrange(key, 0, 49);
-  return res.status(200).json({ entries: entries.map((e) => JSON.parse(e)) });
+  const events = await redis.lrange(key, 0, 49);
+  return res.status(200).json({ events: events.map((e) => JSON.parse(e)) });
 };
 
 export default handler;
