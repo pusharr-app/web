@@ -172,9 +172,9 @@ export const EventRow: React.FC<{ event: Event }> = ({ event }) => {
   const [open, setOpen] = useState(false);
   const toggleOpen = () => setOpen((isOpen) => !isOpen);
   function Row() {
-    // if (event.eventType === 'Test') {
-    //   return <Test event={event} toggleOpen={toggleOpen} />;
-    // }
+    if (event.eventType === 'Test') {
+      return <Test event={event} toggleOpen={toggleOpen} />;
+    }
     if (event.__source === 'sonarr') {
       return <Sonarr event={event} toggleOpen={toggleOpen} />;
     }
