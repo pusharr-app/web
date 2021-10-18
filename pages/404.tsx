@@ -5,7 +5,7 @@ export default function Custom404() {
         <div className="flex-shrink-0 flex justify-center">
           <a href="/" className="inline-flex">
             <span className="sr-only">Pusharr</span>
-            <img className="h-12 w-auto" src="/logo.png" alt="" />
+            <img className="h-12 w-auto" src="/logo.svg" alt="" />
           </a>
         </div>
         <div className="py-16">

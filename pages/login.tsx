@@ -13,7 +13,7 @@ const Login = () => {
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
             <a href="/">
-              <img className="h-12 w-auto" src="/logo.png" alt="Pusharr" />
+              <img className="h-12 w-auto" src="/logo.svg" alt="Pusharr" />
             </a>
             <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
               Sign in to your account
