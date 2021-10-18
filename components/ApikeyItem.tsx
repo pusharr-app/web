@@ -4,8 +4,16 @@ import { ExclamationIcon } from '@heroicons/react/outline';
 import { useAuthUser } from 'next-firebase-auth';
 import { mutate } from 'swr';
 import getAbsoluteURL from '../utils/getAbsoluteURL';
+import { KeyInfo } from '../utils/apikeys';
+import TimeAgo from 'react-timeago';
 
-export function ApikeyItem({ apikey: key }: { apikey: string }) {
+export function ApikeyItem({
+  apikey: key,
+  idx,
+}: {
+  apikey: KeyInfo;
+  idx: number;
+}) {
   const AuthUser = useAuthUser();
   const [open, setOpen] = useState(false);
 
@@ -28,16 +36,26 @@ export function ApikeyItem({ apikey: key }: { apikey: string }) {
 
   return (
     <>
-      <li>
-        <code>{key}</code>
-        <button
-          type="button"
-          className="inline-flex items-center m-2 px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-          onClick={() => setOpen(true)}
-        >
-          Delete
-        </button>
-      </li>
+      <tr className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          {key.name}
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+          <code>{key.key}</code>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <TimeAgo date={key.createdAt} />
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+          <button
+            type="button"
+            className="inline-flex items-center m-2 px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            onClick={() => setOpen(true)}
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
       <Transition.Root show={open} as={Fragment}>
         <Dialog
           as="div"
@@ -102,7 +120,7 @@ export function ApikeyItem({ apikey: key }: { apikey: string }) {
                   <button
                     type="button"
                     className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={() => deleteKey(key)}
+                    onClick={() => deleteKey(key.key)}
                   >
                     Delete
                   </button>

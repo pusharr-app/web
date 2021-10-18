@@ -15,7 +15,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
   if (req.method === 'POST') {
     const key = uniqid();
-    await apikeys.addKey(user.id!, key);
+    const name = req.body.name ?? 'Unnamed key';
+    await apikeys.addKey(user.id!, key, name);
     return res.status(200).json({ key });
   }
   if (req.method === 'DELETE') {
