@@ -14,6 +14,17 @@ const emoji: Record<Sonarr.EventType, string> = {
 const Sonarr: React.FC<{ event: Sonarr.Event }> = ({ event }) => {
   if (event.eventType === 'Rename') return null;
   const ep = event.episodes[0];
+  let quality: string;
+  if (event.eventType === 'Download') {
+    quality = event.episodeFile.quality ?? event.episodes[0].quality ?? '';
+  } else {
+    quality = event.episodes[0].quality ?? '';
+  }
+  const seasonEpisode = `S${ep.seasonNumber
+    .toString()
+    .padStart(2, '0')}E${ep.episodeNumber.toString().padStart(2, '0')} ${
+    ep.quality ?? ''
+  }`;
   return (
     <tr>
       <td className="px-6 py-4 whitespace-nowrap">
@@ -29,17 +40,13 @@ const Sonarr: React.FC<{ event: Sonarr.Event }> = ({ event }) => {
             <div className="text-sm font-medium text-gray-900">
               {event.series.title}
             </div>
-            <div className="text-sm text-gray-500">{ep.airDate ?? ''}</div>
+            <div className="text-sm text-gray-500">{seasonEpisode}</div>
           </div>
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="text-sm text-gray-900">{ep.title}</div>
-        <div className="text-sm text-gray-500">{`S${ep.seasonNumber
-          .toString()
-          .padStart(2, '0')}E${ep.episodeNumber.toString().padStart(2, '0')} ${
-          ep.quality ?? ''
-        }`}</div>
+        <div className="text-sm text-gray-500">{quality}</div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">

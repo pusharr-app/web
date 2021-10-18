@@ -39,7 +39,7 @@ const initAuth = () => {
 
       // By default, go to the index page if the destination URL
       // is invalid or unspecified.
-      let destURL = '/';
+      let destURL = '/dashboard';
       if (destinationParamVal) {
         // Verify the redirect URL host is allowed.
         // https://owasp.org/www-project-web-security-testing-guide/v41/4-Web_Application_Security_Testing/11-Client_Side_Testing/04-Testing_for_Client_Side_URL_Redirect
