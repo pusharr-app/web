@@ -4,9 +4,11 @@ import absoluteUrl from 'next-absolute-url';
 
 const TWELVE_DAYS_IN_MS = 12 * 60 * 60 * 24 * 1000;
 
-const initAuth = () => {
+const initAuth = async () => {
   init({
     debug: false,
+    firebaseAuthEmulatorHost:
+      process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST,
 
     // This demonstrates setting a dynamic destination URL when
     // redirecting from app pages. Alternatively, you can simply
@@ -95,6 +97,17 @@ const initAuth = () => {
       signed: true,
     },
   });
+
+  if (
+    process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST &&
+    typeof window !== 'undefined'
+  ) {
+    const firebase = (await import('firebase')).default;
+    // @ts-ignore
+    window.login = (email: string, password: string) => {
+      return firebase.auth().signInWithEmailAndPassword(email, password);
+    };
+  }
 };
 
 export default initAuth;

@@ -109,11 +109,19 @@ const Dashboard: React.FC<any> = ({
       {typeof window !== 'undefined' &&
         window.location.host.startsWith('localhost') && (
           <>
-            <button type="button" onClick={() => addRadarrTestData()}>
+            <button
+              id="add-radarr-test-data"
+              type="button"
+              onClick={() => addRadarrTestData()}
+            >
               Add Radarr test data
             </button>
 
-            <button type="button" onClick={() => addSonarrTestData()}>
+            <button
+              id="add-sonarr-test-data"
+              type="button"
+              onClick={() => addSonarrTestData()}
+            >
               Add Sonarr test data
             </button>
           </>

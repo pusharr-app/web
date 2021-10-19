@@ -39,3 +39,7 @@ yalc.lock
 
 # redis
 dump.rdb
+
+# firebase
+/emulator-data
+*-debug.log
