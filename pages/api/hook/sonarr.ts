@@ -33,6 +33,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await redis.lpush(key, JSON.stringify(event));
     try {
       const tokens = await pushTokens.getTokensByUser(userid);
+      console.log('Sonarr tokens', tokens);
       for (const token of tokens) {
         if (event.eventType !== 'Rename') {
           const ep = event.episodes[0];
