@@ -27,7 +27,7 @@ export default async function handler(
   if (req.query.params.length < 2) {
     throw new Error('Unknown');
   }
-  const [service, id] = req.query.params as string[];
+  const [service, id, _size] = req.query.params as string[];
   let url = '';
   if (service === 'sonarr') {
     url = await getShowImage(id);
@@ -43,12 +43,14 @@ export default async function handler(
 
   const ONE_DAY = 60 * 60 * 24;
 
+  const size: [number, number] = _size === 'big' ? [600, 400] : [200, 200];
+
   res.writeHead(200, {
     'Content-Type': imageRes.headers.get('Content-Type') ?? 'image/jpeg',
     'Cache-Control': `max-age=${ONE_DAY}, public`,
   });
   const buffer = await arrayBufferToBuffer(await blob.arrayBuffer());
-  const image = sharp(buffer).resize(200, 200, {
+  const image = sharp(buffer).resize(...size, {
     withoutEnlargement: true,
     fit: 'cover',
   });
