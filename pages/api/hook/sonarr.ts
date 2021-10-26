@@ -6,6 +6,8 @@ import type { Sonarr } from '../../../types/Sonarr';
 import { verifyIdToken } from 'next-firebase-auth';
 import { getUserByKey } from '../../../utils/apikeys';
 import { apiWrapper } from '../../../utils/apiWrapper';
+import * as pushTokens from '../../../utils/pushToken';
+import { sendPushNotification } from '../../../services/fcm';
 
 initAuth();
 
@@ -29,6 +31,27 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       __createdAt: new Date(),
     };
     await redis.lpush(key, JSON.stringify(event));
+    try {
+      const tokens = await pushTokens.getTokensByUser(userid);
+      for (const token of tokens) {
+        if (event.eventType !== 'Rename') {
+          const ep = event.episodes[0];
+          const seasonEpisode = `S${ep.seasonNumber
+            .toString()
+            .padStart(2, '0')}E${ep.episodeNumber
+            .toString()
+            .padStart(2, '0')} ${ep.quality ?? ''}`;
+          await sendPushNotification({
+            to: token.token,
+            notification: {
+              body: `${event.eventType} ${seasonEpisode}`,
+              title: event.series.title,
+              image: `https://www.pusharr.com/api/image/radarr/${event.series.tvdbId}/big`,
+            },
+          });
+        }
+      }
+    } catch (error) {}
     return res.status(200).json({ added: true });
   }
 };

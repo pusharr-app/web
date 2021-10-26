@@ -6,6 +6,8 @@ import type { Radarr } from '../../../types/Radarr';
 import { verifyIdToken } from 'next-firebase-auth';
 import { getUserByKey } from '../../../utils/apikeys';
 import { apiWrapper } from '../../../utils/apiWrapper';
+import * as pushTokens from '../../../utils/pushToken';
+import { sendPushNotification } from '../../../services/fcm';
 
 initAuth();
 
@@ -29,6 +31,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       __createdAt: new Date(),
     };
     await redis.lpush(key, JSON.stringify(event));
+    try {
+      const tokens = await pushTokens.getTokensByUser(userid);
+      for (const token of tokens) {
+        if (event.eventType !== 'Rename') {
+          await sendPushNotification({
+            to: token.token,
+            notification: {
+              body: event.eventType,
+              title: `${event.movie.title} (${event.remoteMovie.year})`,
+              image: `https://www.pusharr.com/api/image/radarr/${event.remoteMovie.imdbId}/big`,
+            },
+          });
+        }
+      }
+    } catch (error) {}
     return res.status(200).json({ added: true });
   }
 };
