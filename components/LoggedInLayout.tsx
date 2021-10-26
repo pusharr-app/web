@@ -19,6 +19,7 @@ export const LoggedInLayout: React.FC<{ title: string }> = ({
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
     { name: 'Apikeys', href: '/apikeys', icon: UsersIcon },
+    { name: 'Pushtokens', href: '/push-tokens', icon: UsersIcon },
   ];
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
