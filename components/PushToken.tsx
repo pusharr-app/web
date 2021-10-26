@@ -47,6 +47,11 @@ export function PushToken({ token, idx }: { token: PushToken; idx: number }) {
           </button>
         </td>
       </tr>
+      <tr>
+        <td colSpan={3} className="px-6 py-1">
+          <pre>{JSON.stringify(token, null, 4)}</pre>
+        </td>
+      </tr>
       <Transition.Root show={open} as={Fragment}>
         <Dialog
           as="div"
