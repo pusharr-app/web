@@ -35,7 +35,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const tokens = await pushTokens.getTokensByUser(userid);
       for (const token of tokens) {
         if (event.eventType !== 'Rename') {
-          await sendPushNotification({
+          const res = await sendPushNotification({
             to: token.token,
             notification: {
               body: event.eventType,
@@ -43,9 +43,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
               image: `https://www.pusharr.com/api/image/radarr/${event.remoteMovie.imdbId}/big`,
             },
           });
+          console.log('Radarr push:', res.status);
         }
       }
-    } catch (error) {}
+    } catch (error: any) {
+      console.log('Radarr push:', error.message);
+    }
     return res.status(200).json({ added: true });
   }
 };

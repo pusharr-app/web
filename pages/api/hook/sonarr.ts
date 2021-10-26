@@ -41,7 +41,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             .padStart(2, '0')}E${ep.episodeNumber
             .toString()
             .padStart(2, '0')} ${ep.quality ?? ''}`;
-          await sendPushNotification({
+          const res = await sendPushNotification({
             to: token.token,
             notification: {
               body: `${event.eventType} ${seasonEpisode}`,
@@ -49,9 +49,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
               image: `https://www.pusharr.com/api/image/radarr/${event.series.tvdbId}/big`,
             },
           });
+          console.log('Sonarr push:', res.status);
         }
       }
-    } catch (error) {}
+    } catch (error: any) {
+      console.log('Sonarr push:', error.message);
+    }
     return res.status(200).json({ added: true });
   }
 };
