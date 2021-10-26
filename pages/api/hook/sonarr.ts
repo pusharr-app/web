@@ -47,7 +47,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             notification: {
               body: `${event.eventType} ${seasonEpisode}`,
               title: event.series.title,
-              image: `https://www.pusharr.com/api/image/radarr/${event.series.tvdbId}/big`,
+              image: `https://www.pusharr.com/api/image/sonarr/${event.series.tvdbId}/big`,
             },
           });
           console.log('Sonarr push:', res.status);
